@@ -19,10 +19,10 @@ export const software = [
 ];
 
 export const gear: { name: string; use: string }[] = [
-  { name: "DSLR 101231231", use: "Camera" },
-  { name: "This is LEEEEEEEEEENS", use: "Lens" },
-  { name: "Lighting mcqueen", use: "Lighting" },
-  { name: "Xiaomi Poco x6 pro sakalam", use: "Other" },
+  { name: "Sony a6700", use: "Camera" },
+  { name: "Sony FE 28-60mm f/4-5.6", use: "Lens" },
+  { name: "Sony FE 50mm  f/1.8", use: "Lens" },
+  { name: "Yongnuo E 11mm f/1.8", use: "Lens" },
   // Nothing real here yet -- add your camera body, lenses, and lighting as you
   // like. Examples:
   // { name: "Fujifilm X-S10", use: "Camera body" },
