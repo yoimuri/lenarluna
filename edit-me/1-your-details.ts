@@ -16,7 +16,7 @@ export const you = {
   role: "Photography · Videography · Video Editing",
 
   // Where you're based. Shows in the strip under the top photo.
-  // Example: "Cebu City, Philippines"
+  // Example: "Quezon City, Philippines"
   city: "kung nasan si hev abi(hindi sa kulungan)",
 
   // The year you started shooting. Example: "2019"
@@ -24,7 +24,7 @@ export const you = {
 
   // A short status line. Shows in gold in the strip under the top photo.
   // Example: "Open for work", "Booking for December", "Fully booked"
-  status: "Open to be a slave",
+  status: "Okay lang",
 
   // ONE sentence, in your own words, about your work. This shows in large
   // type right beside your profile picture -- it's one of the first things
