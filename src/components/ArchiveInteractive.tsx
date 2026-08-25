@@ -49,12 +49,21 @@ export default function ArchiveInteractive({ categories, total }: { categories: 
   const touchStart = useRef<number | null>(null);
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const frames = useRef<number[]>([]);
+  // The real in-flight target, updated the instant a click happens. `selected`
+  // (React state) only actually commits when a transition's setTimeout below
+  // fires -- and spam-clicking cancels that timeout before it ever runs. Without
+  // this ref, every click mid-animation reads the same stale `selected` and
+  // keeps re-targeting the SAME next category instead of advancing further
+  // with each click, so spam-clicking "next" just restarts one transition
+  // over and over instead of stepping through several.
+  const targetRef = useRef(0);
 
   const current = tabs[selected];
 
   function goTo(nextIndex: number) {
-    if (nextIndex === selected || nextIndex < 0 || nextIndex >= tabs.length) return;
-    const nextDir = nextIndex > selected ? "right" : "left";
+    if (nextIndex === targetRef.current || nextIndex < 0 || nextIndex >= tabs.length) return;
+    const nextDir = nextIndex > targetRef.current ? "right" : "left";
+    targetRef.current = nextIndex;
     setDir(nextDir);
     timers.current.forEach(clearTimeout);
     timers.current = [];
@@ -115,6 +124,7 @@ export default function ArchiveInteractive({ categories, total }: { categories: 
       if (!m) return;
       const i = tabs.findIndex((t) => t.slug === decodeURIComponent(m[1]));
       if (i < 0) return;
+      targetRef.current = i;
       setSelected(i);
       setVisible(PAGE_SIZE);
       setActiveIndex(0);
@@ -172,8 +182,8 @@ export default function ArchiveInteractive({ categories, total }: { categories: 
     const dx = e.changedTouches[0].clientX - touchStart.current;
     touchStart.current = null;
     if (Math.abs(dx) < 40) return;
-    if (dx < 0) goTo(selected + 1); // swipe left -> next category
-    else goTo(selected - 1); // swipe right -> previous category
+    if (dx < 0) goTo(targetRef.current + 1); // swipe left -> next category
+    else goTo(targetRef.current - 1); // swipe right -> previous category
   }
 
   const shown = current.images.slice(0, visible);
@@ -223,7 +233,7 @@ export default function ArchiveInteractive({ categories, total }: { categories: 
           <button
             type="button"
             aria-label="Previous category"
-            onClick={() => goTo(selected - 1)}
+            onClick={() => goTo(targetRef.current - 1)}
             disabled={selected === 0}
             className="flex h-8 w-8 items-center justify-center border border-ink-700 text-muted-400 transition-colors duration-fast hover:border-gold-500 hover:text-gold-500 disabled:opacity-30 disabled:hover:border-ink-700 disabled:hover:text-muted-400"
           >
@@ -232,7 +242,7 @@ export default function ArchiveInteractive({ categories, total }: { categories: 
           <button
             type="button"
             aria-label="Next category"
-            onClick={() => goTo(selected + 1)}
+            onClick={() => goTo(targetRef.current + 1)}
             disabled={selected === tabs.length - 1}
             className="flex h-8 w-8 items-center justify-center border border-ink-700 text-muted-400 transition-colors duration-fast hover:border-gold-500 hover:text-gold-500 disabled:opacity-30 disabled:hover:border-ink-700 disabled:hover:text-muted-400"
           >

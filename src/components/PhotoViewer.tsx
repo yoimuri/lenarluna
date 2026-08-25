@@ -13,7 +13,16 @@
 //   - Escape, the close button, and clicking anywhere outside the photo
 //     itself all close it. Native pinch-zoom is never disabled.
 
-import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 export type ViewerImage = { src: string; alt: string; caption?: string; description?: string };
 
@@ -176,6 +185,11 @@ function PhotoViewerModal({
   const [zoomStep, setZoomStep] = useState(0);
   const [origin, setOrigin] = useState({ x: 50, y: 50 });
   const [dragging, setDragging] = useState(false);
+  // The pixel-accurate cap the image is allowed to render at, measured
+  // straight off the actual available area -- see the effect below for why
+  // `max-height: 100%` in CSS alone can't be trusted here.
+  const viewerAreaRef = useRef<HTMLDivElement>(null);
+  const [maxSize, setMaxSize] = useState<{ w: number; h: number } | null>(null);
 
   // Everything about an in-progress press lives in a ref, not state: it is
   // updated on every pointermove and must not re-render the image.
@@ -201,6 +215,37 @@ function PhotoViewerModal({
 
   useEffect(() => {
     closeBtnRef.current?.focus();
+  }, []);
+
+  // Measures the actual available space and caps the image to it in real
+  // pixels, rather than leaning on CSS `max-height: 100%`. That percentage
+  // only resolves against a parent whose OWN `height` is explicitly set --
+  // and this parent's height only ever comes FROM that same max-height
+  // percentage, so per spec it never counts as "explicit." The practical
+  // effect: a landscape photo (width is always the limiting side here) never
+  // showed it, but a portrait photo rendered at its full native pixel size
+  // with the height cap silently ignored -- overflowing off the top and
+  // bottom of the screen, which read as the photo opening pre-zoomed even
+  // though nothing was ever actually zoomed. useLayoutEffect (not useEffect)
+  // so this measures and applies before the browser paints -- no flash of
+  // the oversized image on the way in.
+  useLayoutEffect(() => {
+    const el = viewerAreaRef.current;
+    if (!el) return;
+    const update = () => {
+      const cs = getComputedStyle(el);
+      const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+      setMaxSize({ w: el.clientWidth - padX, h: el.clientHeight - padY });
+    };
+    update();
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    window.addEventListener("resize", update);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+    };
   }, []);
 
   // Lock background scrolling while the viewer is open.
@@ -319,6 +364,7 @@ function PhotoViewerModal({
           itself -- closes the viewer. The photo wrapper below hugs the
           image exactly, so "outside the photo" means what it looks like. */}
       <div
+        ref={viewerAreaRef}
         className="relative flex flex-1 items-center justify-center overflow-hidden px-4 pb-2"
         onClick={(e) => {
           if (e.target === e.currentTarget) onClose();
@@ -357,6 +403,13 @@ function PhotoViewerModal({
               dragging ? "" : "transition-transform duration-base ease-shutter"
             }`}
             style={{
+              // Real pixel values, not CSS max-height/max-width percentages
+              // -- see the useLayoutEffect above for why those don't reach
+              // this element. Falls back to the (broken-for-tall-photos, but
+              // harmless) Tailwind classes for the one frame before the
+              // layout effect has measured anything.
+              maxWidth: maxSize ? `${maxSize.w}px` : undefined,
+              maxHeight: maxSize ? `${maxSize.h}px` : undefined,
               transformOrigin: `${origin.x}% ${origin.y}%`,
               transform: `scale(${scale})`,
               // Deliberately left at the browser default. Forcing

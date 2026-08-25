@@ -20,7 +20,7 @@ export default function Home() {
     <>
       <JsEnabled />
       <div id="top" />
-      <Nav name={you.name} hasVideos={videos.length > 0} />
+      <Nav name={you.name} siteUrl={you.siteUrl} hasVideos={videos.length > 0} />
       <ScrollEdgeFade />
       <PhotoViewerProvider>
         <main>

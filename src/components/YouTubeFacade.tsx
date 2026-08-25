@@ -10,18 +10,30 @@ const PLACEHOLDER_MAX_WIDTH = 120;
 // Poster image plus a play button; the real YouTube iframe only loads once
 // someone actually clicks. Keeps the page fast no matter how many videos
 // Lenar adds. See BUILD-SPEC.md section 7 and AD-11.
+//
+// Whether THIS card is playing is passed in, not owned locally -- see
+// VideoGrid.tsx. Every embed autoplays, so two of these mounted at once are
+// two autoplaying cross-origin iframes fighting for bandwidth/CPU, and the
+// second one stalls at "loading" instead of starting. Controlling "which one
+// is playing" from one place, one level up, is what makes starting a new
+// video stop the previous one instead of piling up.
 export default function YouTubeFacade({
   link,
   title,
   description,
   index,
+  playing,
+  onPlay,
+  onStop,
 }: {
   link: string;
   title: string;
   description?: string;
   index: number;
+  playing: boolean;
+  onPlay: () => void;
+  onStop: () => void;
 }) {
-  const [playing, setPlaying] = useState(false);
   const id = extractYouTubeId(link);
   const [posterFailed, setPosterFailed] = useState(false);
 
@@ -33,11 +45,11 @@ export default function YouTubeFacade({
   useEffect(() => {
     if (!playing) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setPlaying(false);
+      if (e.key === "Escape") onStop();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [playing]);
+  }, [playing, onStop]);
 
   if (!id) return null;
 
@@ -66,7 +78,7 @@ export default function YouTubeFacade({
                 poster and leaves nothing running in the background. */}
             <button
               type="button"
-              onClick={() => setPlaying(false)}
+              onClick={onStop}
               aria-label={`Stop ${title || "video"}`}
               className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-bone-100/30 bg-ink-900/80 text-bone-100 backdrop-blur-sm transition-colors duration-fast hover:border-gold-500 hover:text-gold-500"
             >
@@ -78,7 +90,7 @@ export default function YouTubeFacade({
         ) : (
           <button
             type="button"
-            onClick={() => setPlaying(true)}
+            onClick={onPlay}
             className="group relative block h-full w-full"
             aria-label={`Play ${title || "video"}`}
           >

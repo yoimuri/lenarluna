@@ -13,6 +13,7 @@ export type YourDetails = {
   status: string;
   quote: string;
   coverCaption: string;
+  siteUrl: string;
   email: string;
   facebookUrl: string;
   instagramHandle: string;

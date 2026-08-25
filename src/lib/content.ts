@@ -25,6 +25,16 @@ function trim(s: unknown): string {
   return typeof s === "string" ? s.trim() : "";
 }
 
+// Only accept a real, full URL. Something like "lenarluna.vercel.app" with
+// no "https://" in front would otherwise be treated as a path on THIS site
+// and go nowhere -- rejecting it here just falls back to the in-page
+// scroll-to-top link, same as leaving the field blank. Never breaks the
+// build over a typo.
+function normalizeSiteUrl(s: unknown): string {
+  const trimmed = trim(s);
+  return /^https?:\/\//i.test(trimmed) ? trimmed : "";
+}
+
 function normalizeYou(): YourDetails {
   return {
     name: trim(you.name),
@@ -34,6 +44,7 @@ function normalizeYou(): YourDetails {
     status: trim(you.status),
     quote: trim(you.quote),
     coverCaption: trim(you.coverCaption),
+    siteUrl: normalizeSiteUrl((you as { siteUrl?: string }).siteUrl),
     contactIntro: trim((you as { contactIntro?: string }).contactIntro),
     email: trim(you.email),
     facebookUrl: trim(you.facebookUrl),

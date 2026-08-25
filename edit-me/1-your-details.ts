@@ -36,6 +36,13 @@ export const you = {
   // Example: "Sunset shoot, Moalboal 2025"
   coverCaption: "Sunset shoot, Moalboal 2025",
 
+  // Your name at the top of the site works like a logo -- clicking it goes
+  // home. Put your site's own live address here (the FULL link, starting
+  // with https://) and that's where it goes.
+  // Leave as "" and it just scrolls back to the top of the page instead --
+  // useful before the site has a real address yet.
+  siteUrl: "https://lenarluna.vercel.app/",
+
   // -------------------------------------------------------------------------
   // CONTACT -- these become the buttons and links in the Contact section.
   // -------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 import { getSiteContent } from "@/lib/content";
 import SectionHeader from "./SectionHeader";
 import Reveal from "./Reveal";
-import YouTubeFacade from "./YouTubeFacade";
+import VideoGrid from "./VideoGrid";
 
 // "04 VIDEOS" -- its own section with its own nav button, entirely out of
 // the archive (AD-10). Renders nothing at all if there are no videos yet --
@@ -28,13 +28,7 @@ export default function Videos() {
         </div>
       </Reveal>
 
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {videos.map((v, i) => (
-          <Reveal key={v.link}>
-            <YouTubeFacade link={v.link} title={v.title} description={v.description} index={i} />
-          </Reveal>
-        ))}
-      </div>
+      <VideoGrid videos={videos} />
     </section>
   );
 }

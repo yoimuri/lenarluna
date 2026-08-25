@@ -13,7 +13,15 @@ type NavLink = { href: string; label: string };
 // Everything here is select-none: a nav button that shows a text-selection
 // highlight when someone drags across it reads as a broken link, not a
 // button.
-export default function Nav({ name, hasVideos }: { name: string; hasVideos: boolean }) {
+export default function Nav({
+  name,
+  siteUrl,
+  hasVideos,
+}: {
+  name: string;
+  siteUrl: string;
+  hasVideos: boolean;
+}) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -48,16 +56,30 @@ export default function Nav({ name, hasVideos }: { name: string; hasVideos: bool
       }`}
     >
       <div className="flex items-center justify-between px-5 py-4 sm:px-8 md:px-13">
-        {/* The name is the way back to the top -- it behaves like a logo,
-            so it should act like one. */}
-        <a
-          href="#top"
-          onClick={toTop}
-          aria-label="Back to top"
-          className="truncate font-mono text-[11px] tracking-[0.2em] text-bone-100 transition-colors duration-fast hover:text-gold-500"
-        >
-          {name || "Lenar Joshua M. Luna"}
-        </a>
+        {/* The name behaves like a logo. With a real siteUrl set (see
+            edit-me/1-your-details.ts) it's a genuine link to the live site's
+            own homepage -- right-click, copy-link and "open in new tab" all
+            work as expected, the way a logo link should. Without one (no
+            address yet, e.g. still on localhost) it falls back to an in-page
+            scroll to the top instead of linking nowhere. */}
+        {siteUrl ? (
+          <a
+            href={siteUrl}
+            aria-label={`${name || "Lenar Joshua M. Luna"} -- go to homepage`}
+            className="truncate font-mono text-[11px] tracking-[0.2em] text-bone-100 transition-colors duration-fast hover:text-gold-500"
+          >
+            {name || "Lenar Joshua M. Luna"}
+          </a>
+        ) : (
+          <a
+            href="#top"
+            onClick={toTop}
+            aria-label="Back to top"
+            className="truncate font-mono text-[11px] tracking-[0.2em] text-bone-100 transition-colors duration-fast hover:text-gold-500"
+          >
+            {name || "Lenar Joshua M. Luna"}
+          </a>
+        )}
 
         {/* desktop: the full row of hairline buttons */}
         <nav className="hidden items-center border border-bone-100/10 sm:flex">
