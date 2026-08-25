@@ -30,7 +30,7 @@ export const you = {
   // type right beside your profile picture -- it's one of the first things
   // people read. Something you'd actually say, not a slogan.
   // Example: "It's not about brand, it's about style."
-  quote: "Masdan mo ang mga atabs",
+  quote: "The eye should learn to look before it opens.",
 
   // An optional caption under your big top photo. Leave as "" for no caption.
   // Example: "Sunset shoot, Moalboal 2025"
