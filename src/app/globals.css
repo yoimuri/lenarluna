@@ -1,0 +1,156 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  /* Anchor jumps land below the fixed nav instead of under it. */
+  scroll-padding-top: 5rem;
+}
+
+body {
+  /* Never let a wide element (grid, tabs) create sideways scroll. */
+  overflow-x: hidden;
+}
+
+::selection {
+  background: #b08850;
+  color: #0f0f0a;
+}
+
+/* Visible focus ring everywhere -- never remove this. */
+:focus-visible {
+  outline: 2px solid #b08850;
+  outline-offset: 3px;
+}
+
+/* ---- Reveal-on-scroll ----
+   Default state is fully visible. JS adds .js-enabled to <html> once it has
+   mounted, and only THEN does .reveal start hidden and wait to be triggered.
+   This means no-JS visitors and crawlers see everything immediately -- a
+   reveal animation must never be the reason content stays invisible. */
+.js-enabled .reveal {
+  opacity: 0;
+  clip-path: inset(6% 6% 6% 6%);
+  transform: scale(1.04);
+  transition:
+    opacity 520ms cubic-bezier(0.16, 1, 0.3, 1),
+    clip-path 520ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.js-enabled .reveal.is-visible {
+  opacity: 1;
+  clip-path: inset(0% 0% 0% 0%);
+  transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .js-enabled .reveal {
+    opacity: 1 !important;
+    clip-path: inset(0%) !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  /* The category cross-fade (ArchiveInteractive) checks this same media
+     query in JS and skips straight to the final state -- no leaving/entering
+     frames -- so there's nothing left here to override for it. The edge
+     fades get a fixed low opacity instead of tracking scroll (below). */
+  * {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* ---- Hero settle (section 6.8) ----
+   The cover photo scales down slightly on load; each headline line clips in
+   from below. Pure CSS, no JS -- `both` fill-mode keeps the end state. */
+@keyframes hero-scale-in {
+  from { transform: scale(1.06); }
+  to { transform: scale(1); }
+}
+.hero-bg {
+  animation: hero-scale-in 1200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ---- Film grain ----
+   A fixed, very low-opacity noise layer over the whole page. It's the single
+   cheapest thing that makes a dark site read as PHOTOGRAPHIC rather than just
+   dark -- it gives flat black areas a physical texture, like film stock.
+   Kept under 4% opacity so it never muddies an actual photograph. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---- Portrait grade ----
+   His portrait may be a casual event photo: hard flash, mixed white
+   balance, busy background. Dropped in raw it fights the site's palette and
+   reads as a snapshot pasted onto a designed page. This pulls saturation
+   down, warms it toward the deck's gold, and vignettes the edges so it sits
+   in the design instead of on top of it. Applied in CSS, not baked into the
+   file, so swapping the photo later needs no re-processing. */
+.portrait-grade img {
+  filter: saturate(0.62) contrast(1.09) brightness(0.94);
+}
+.portrait-grade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 45%, rgba(15, 15, 10, 0.55) 100%),
+    linear-gradient(to bottom, rgba(176, 136, 80, 0.14), rgba(24, 24, 16, 0.3));
+  mix-blend-mode: multiply;
+}
+.portrait-grade::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(15, 15, 10, 0.9) 0%, transparent 45%);
+}
+
+/* ---- Scroll edge fade (section 6.7) ----
+   Content dissolves into the edge it's leaving instead of being cut off by
+   it. ScrollEdgeFade.tsx drives --fade-top-opacity / --fade-bottom-opacity
+   via one throttled scroll listener; this is just the paint. */
+.edge-fade-top,
+.edge-fade-bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 150px;
+  z-index: 30;
+  pointer-events: none;
+  transition: opacity 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.edge-fade-top {
+  top: 0;
+  background: linear-gradient(to bottom, #0f0f0a 0%, rgba(15, 15, 10, 0) 100%);
+  opacity: var(--fade-top-opacity, 0);
+}
+.edge-fade-bottom {
+  bottom: 0;
+  background: linear-gradient(to top, #0f0f0a 0%, rgba(15, 15, 10, 0) 100%);
+  opacity: var(--fade-bottom-opacity, 0);
+}
+@media (prefers-reduced-motion: reduce) {
+  /* A constant soft edge instead of one that tracks scroll direction --
+     the softened look survives, the motion driving it doesn't. */
+  .edge-fade-top,
+  .edge-fade-bottom {
+    opacity: 0.12 !important;
+    transition: none !important;
+  }
+}
