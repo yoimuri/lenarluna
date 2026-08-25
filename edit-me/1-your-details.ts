@@ -58,7 +58,7 @@ export const you = {
 
   // Your Facebook profile -- the FULL link, not just the username.
   // This is your main contact method, so it gets the big button.
-  facebookUrl: "https://www.facebook.com/lenarjoshua.luna",
+  facebookUrl: "https://www.facebook.com/share/1CDCj8UgxP/",
 
   // Your Instagram username, without the @ symbol.
   instagramHandle: "lnrstory",
