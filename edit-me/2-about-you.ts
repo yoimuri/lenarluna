@@ -6,14 +6,14 @@
 
 export const about = {
   // The heading above your story. You probably don't need to change this.
-  heading: "Sino nga ba ako?",
+  heading: "Behind the lens",
 
   // 2-3 sentences in your own words: how you got into photography, and what
   // you like shooting most. Not a formal bio -- just how you'd actually
   // explain it to someone. This is the SHORT one, right under the heading.
   //
   // Leave a blank line between paragraphs if you want more than one.
-  story: "My name is Lenar Joshua M. Luna, I am a photographer and videographer. I started my journey in photography when I was a child, fascinated by the way light and shadow could tell a story. Over the years, I've honed my skills and developed a passion for capturing moments that evoke emotion and tell compelling narratives.\n\nI specialize in portrait and landscape photography, always striving to find the perfect balance between technical precision and artistic expression. My goal is to create images that resonate with viewers and leave a lasting impression. ",
+  story: "I graduated with a degree in BS Entrepreneurship, but my real heart was always behind the camera. Stepping away from the office routine to dive into visual content creation was the decision that really makes me alive. Nothing beats the rush of capturing raw emotion or bringing a narrative to life in post-production. Today, I bring that entrepreneurial hustle and structure to every creative project, crafting visual experiences that leave a lasting impression. ",
 
   // The LONGER bio. This sits underneath your Software and Gear lists, so
   // it's the part someone reads once they've already scrolled that far and
