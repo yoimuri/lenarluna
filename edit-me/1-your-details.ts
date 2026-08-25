@@ -17,14 +17,14 @@ export const you = {
 
   // Where you're based. Shows in the strip under the top photo.
   // Example: "Quezon City, Philippines"
-  city: "kung nasan si hev abi(hindi sa kulungan)",
+  city: "Quezon City, Metro Manila, Philippines",
 
   // The year you started shooting. Example: "2019"
-  since: "birth",
+  since: "2023",
 
   // A short status line. Shows in gold in the strip under the top photo.
   // Example: "Open for work", "Booking for December", "Fully booked"
-  status: "Okay lang",
+  status: "Open for booking",
 
   // ONE sentence, in your own words, about your work. This shows in large
   // type right beside your profile picture -- it's one of the first things
@@ -34,7 +34,7 @@ export const you = {
 
   // An optional caption under your big top photo. Leave as "" for no caption.
   // Example: "Sunset shoot, Moalboal 2025"
-  coverCaption: "Sunset shoot, Moalboal 2025",
+  coverCaption: "Escalera Cafe, 2023",
 
   // Your name at the top of the site works like a logo -- clicking it goes
   // home. Put your site's own live address here (the FULL link, starting
