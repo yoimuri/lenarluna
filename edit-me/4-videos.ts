@@ -29,8 +29,8 @@ export const videos: { link: string; title: string; description?: string }[] = [
   // ---- SAMPLE VIDEOS -- delete these three once your real ones are in ----
   {
     link: "https://www.facebook.com/reel/2072335826985799",
-    title: "Sample — Never Gonna Give You Up",
-    description: "A placeholder so you can see how a video looks here.",
+    title: "Juliet's 60th Birthday",
+    description: "July 24, 2026",
   },
   {
     link: "https://www.youtube.com/watch?v=JobpOg3Cceg",
