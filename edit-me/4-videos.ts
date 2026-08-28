@@ -28,7 +28,7 @@ export const intro = "My sample videos live here:";
 export const videos: { link: string; title: string; description?: string }[] = [
   // ---- SAMPLE VIDEOS -- delete these three once your real ones are in ----
   {
-    link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    link: "https://www.facebook.com/reel/2072335826985799",
     title: "Sample — Never Gonna Give You Up",
     description: "A placeholder so you can see how a video looks here.",
   },
