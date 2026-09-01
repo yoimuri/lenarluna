@@ -47,7 +47,7 @@ export const you = {
   // CONTACT -- these become the buttons and links in the Contact section.
   // -------------------------------------------------------------------------
 
-  // The short paragraph under "BOOK A SHOOT". Say whatever you like here --
+  // The short paragraph under "Book your Events Now!". Say whatever you like here --
   // how you prefer to be contacted, how fast you usually reply, anything.
   // Leave it as "" and no paragraph appears.
   contactIntro:
