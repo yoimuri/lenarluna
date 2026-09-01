@@ -79,7 +79,7 @@ export default function Contact() {
           <div className="lg:col-span-6">
             <SectionHeader number="05" label="CONTACT" />
             <h2 className="font-display text-[2.2rem] font-black uppercase leading-[0.96] tracking-[-0.035em] sm:text-[2.9rem]">
-              Book a Shoot
+              Book your Events Now!
             </h2>
             {contactIntro && (
               <p className="mt-4 max-w-[44ch] text-sm leading-relaxed text-muted-400">
