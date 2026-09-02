@@ -78,7 +78,7 @@ export const captions: Record<string, CaptionEntry> = {
   // this line just stops the filename's leftover text from becoming the
   // caption underneath it. Give it a real caption any time by changing "" to
   // words, the same as any other line in this file.
-  "3-best-work/00--LNR00344.jpg": "",
+  "3-best-work/00--LNR00344.jpg": "4k Zoom Test",
 
   // ── AUTO-GENERATED, 2026-09-02 ──────────────────────────────────────────
   // Every one of these is a real photo that came straight off your camera
