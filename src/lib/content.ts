@@ -45,6 +45,7 @@ function normalizeYou(): YourDetails {
     quote: trim(you.quote),
     coverCaption: trim(you.coverCaption),
     siteUrl: normalizeSiteUrl((you as { siteUrl?: string }).siteUrl),
+    contactHeading: trim((you as { contactHeading?: string }).contactHeading) || "Book a Shoot",
     contactIntro: trim((you as { contactIntro?: string }).contactIntro),
     email: trim(you.email),
     facebookUrl: trim(you.facebookUrl),
@@ -85,9 +86,13 @@ function normalizeVideos(): VideoItem[] {
     if (!link) return; // an empty placeholder block, nothing to warn about
     const id = extractYouTubeId(link);
     if (!id) {
+      const isFacebook = /facebook\.com|fb\.watch/i.test(link);
       videoWarnings.push(
-        `edit-me/4-videos.ts, entry ${i + 1}: "${link}" doesn't look like a YouTube ` +
-          `link, so this video won't show up on the site. Check the link and try again.`
+        `edit-me/4-videos.ts, entry ${i + 1}: "${link}" doesn't work here -- ` +
+          (isFacebook
+            ? `only YouTube links are supported right now, not Facebook. `
+            : `it doesn't look like a YouTube link. `) +
+          `This video won't show up on the site until the link is fixed.`
       );
       return;
     }
@@ -117,6 +122,15 @@ export function getSiteContent() {
       videosIntro: trim(rawVideosIntro),
       contactIntro: normalizeYou().contactIntro,
     };
+    // A dropped video (a link that doesn't look like YouTube) used to fail
+    // completely silently -- getContentWarnings() existed but nothing ever
+    // called it, so a video could vanish from the site with zero trace
+    // anywhere, not even in the build log. This is the one place content is
+    // loaded exactly once per build, so it's the right spot to actually
+    // surface that: console.warn lands in `npm run build`'s output locally,
+    // and in Vercel's build log in production -- the same place Clint
+    // already checks for a broken build (see CLINT-RUNBOOK.md).
+    for (const w of videoWarnings) console.warn(`[content] ${w}`);
   }
   return cached;
 }

@@ -48,8 +48,6 @@ export const about = {
   //   { label: "Weddings shot",   value: "32" }
   stats: [
     { label: "Years shooting", value: "2019" },
-    { label: "Events covered", value: "999+" },
-    { label: "Clients served", value: "999+" },
     { label: "Based in", value: "Quezon City" },
   ],
 };

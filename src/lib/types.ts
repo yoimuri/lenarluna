@@ -14,6 +14,7 @@ export type YourDetails = {
   quote: string;
   coverCaption: string;
   siteUrl: string;
+  contactHeading: string;
   email: string;
   facebookUrl: string;
   instagramHandle: string;
