@@ -36,13 +36,17 @@ function normalizeSiteUrl(s: unknown): string {
 }
 
 function normalizeYou(): YourDetails {
+  const name = trim(you.name);
   return {
-    name: trim(you.name),
+    name,
     role: trim(you.role),
     city: trim(you.city),
     since: trim(you.since),
     status: trim(you.status),
     quote: trim(you.quote),
+    // Falls back to the site owner's own name so a blank quoteAuthor never
+    // renders the quote as attributed to no one.
+    quoteAuthor: trim((you as { quoteAuthor?: string }).quoteAuthor) || name,
     coverCaption: trim(you.coverCaption),
     siteUrl: normalizeSiteUrl((you as { siteUrl?: string }).siteUrl),
     contactHeading: trim((you as { contactHeading?: string }).contactHeading) || "Book a Shoot",

@@ -12,6 +12,7 @@ export type YourDetails = {
   since: string;
   status: string;
   quote: string;
+  quoteAuthor: string;
   coverCaption: string;
   siteUrl: string;
   contactHeading: string;

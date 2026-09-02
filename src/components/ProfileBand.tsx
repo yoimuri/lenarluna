@@ -117,7 +117,7 @@ export default function ProfileBand() {
                 {you.quote}
               </p>
               <p className="mt-3 select-none font-mono text-[9px] tracking-[0.2em] text-muted-400">
-                — {(you.name || "LENAR JOSHUA M. LUNA").toUpperCase()}
+                — {(you.quoteAuthor || you.name || "LENAR JOSHUA M. LUNA").toUpperCase()}
               </p>
             </div>
           </div>

@@ -161,7 +161,7 @@ appear on the site:
 
 | File | What it controls |
 |---|---|
-| `1-your-details.ts` | your name, city, status, contact links, the quote beside your picture, the heading and paragraph in Contact, and the address your name links to at the top of the site |
+| `1-your-details.ts` | your name, city, status, contact links, the quote beside your picture (and who said it), the heading and paragraph in Contact, and the address your name links to at the top of the site |
 | `2-about-you.ts` | your short story, your longer bio, and the four boxes at the bottom of About |
 | `3-software-and-gear.ts` | the software and camera gear lists |
 | `4-videos.ts` | your YouTube videos, and the line that introduces that section |
