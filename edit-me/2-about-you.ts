@@ -46,8 +46,5 @@ export const about = {
   //   { label: "Clients served",  value: "50+" }
   //   { label: "Based in",        value: "Cebu City" }
   //   { label: "Weddings shot",   value: "32" }
-  stats: [
-    { label: "Years shooting", value: "2019" },
-    { label: "Based in", value: "Quezon City" },
-  ],
+  
 };
