@@ -60,7 +60,17 @@ function normalizeYou(): YourDetails {
 }
 
 function normalizeAbout(): AboutYou {
-  const stats = Array.isArray(about.stats) ? about.stats : [];
+  // Cast through unknown, same reason as extendedBio/contactHeading/etc.
+  // below: about.stats has no fixed type, since edit-me/2-about-you.ts
+  // isn't annotated -- TypeScript infers its shape straight from whatever
+  // is literally written there. An emptied-out `stats: []` in that file
+  // infers as `never[]`, which breaks the .map() below with no array to
+  // even be empty about -- this is what happens when a real edit-me file
+  // isn't around to infer from. Casting here means an empty, a populated,
+  // or a malformed stats array in that file are all handled the same way,
+  // regardless of what shape TypeScript would otherwise have guessed.
+  const rawStats = (about as { stats?: unknown }).stats;
+  const stats: { label?: unknown; value?: unknown }[] = Array.isArray(rawStats) ? rawStats : [];
   return {
     heading: trim(about.heading) || "Behind the Camera",
     story: trim(about.story),

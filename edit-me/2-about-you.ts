@@ -46,5 +46,14 @@ export const about = {
   //   { label: "Clients served",  value: "50+" }
   //   { label: "Based in",        value: "Cebu City" }
   //   { label: "Weddings shot",   value: "32" }
-  
+  //
+  // To remove ALL of them: delete every { ... } line but KEEP the two lines
+  // "stats: [" and "]" themselves -- like this, with nothing in between:
+  //     stats: [
+  //     ],
+  // Deleting those two lines too (leaving no "stats:" at all) breaks the
+  // site's next update -- the whole file needs "stats:" to be there, even
+  // when the list inside it is empty.
+  stats: [
+  ],
 };
