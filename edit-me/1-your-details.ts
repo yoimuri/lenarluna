@@ -29,14 +29,14 @@ export const you = {
   // ONE sentence, right beside your profile picture -- it's one of the
   // first things people read. Doesn't have to be your own words.
   // Example: "It's not about brand, it's about style."
-  quote: "The eye should learn to look before it opens.",
+  quote: "The eye should learn to listen before it looks.",
 
   // Who said it. The site always shows the quote as someone's words, so
   // this can't be left blank -- if it's your own line, put your own name
   // here again. If you borrowed a quote from someone else (a photographer
   // you admire, a saying, anything not originally yours), credit them here
   // instead so it doesn't read as something you said.
-  quoteAuthor: "Lenar Joshua M. Luna",
+  quoteAuthor: "Robert Frank",
 
   // An optional caption under your big top photo. Leave as "" for no caption.
   // Example: "Sunset shoot, Moalboal 2025"
