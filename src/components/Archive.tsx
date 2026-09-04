@@ -14,7 +14,7 @@ export default function Archive() {
       <Reveal>
         <div className="mb-6 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div>
-            <SectionHeader number="03" label="ARCHIVE" />
+            <SectionHeader number="03" label="GALLERY" />
             <h2 className="font-display text-[2.2rem] font-black uppercase leading-[0.96] tracking-[-0.035em] sm:text-[2.9rem]">
               Everything Else
               <br />
