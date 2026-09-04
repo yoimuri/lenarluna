@@ -35,7 +35,7 @@ export default function Nav({
   const links: NavLink[] = [
     { href: "#selects", label: "Selects" },
     { href: "#about", label: "About" },
-    { href: "#archive", label: "Archive" },
+    { href: "#archive", label: "Gallery" },
     ...(hasVideos ? [{ href: "#videos", label: "Videos" }] : []),
     { href: "#contact", label: "Contact" },
   ];
