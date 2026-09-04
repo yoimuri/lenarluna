@@ -63,7 +63,7 @@ export const captions: Record<string, CaptionEntry> = {
   // These two point at photos that exist in your site RIGHT NOW, so you can
   // see the effect straight away. Delete both lines whenever you like.
 
-  "3-best-work/01--debut-celebration.jpg": "The first dance",
+  "3-best-work/01--DSCF3175.jpg": "Stepping into the event scene for the first time.",
 
   "3-best-work/02--studio-portrait.jpg": {
     title: "Ball pit, 4pm",
