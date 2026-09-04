@@ -16,9 +16,7 @@ export default function Archive() {
           <div>
             <SectionHeader number="03" label="GALLERY" />
             <h2 className="font-display text-[2.2rem] font-black uppercase leading-[0.96] tracking-[-0.035em] sm:text-[2.9rem]">
-              Everything Else
-              <br />
-              On File
+              Explore Highlights by Category
             </h2>
           </div>
         </div>
