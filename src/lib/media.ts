@@ -6,6 +6,7 @@
 import type { Category, MediaImage, MediaManifest } from "./types";
 import { captions } from "../../edit-me/5-captions";
 import { highlights } from "../../edit-me/6-highlights";
+import { words as rawWords } from "../../edit-me/7-words-on-the-site";
 
 let manifest: MediaManifest | null = null;
 
@@ -141,9 +142,22 @@ export function getAboutPhoto(): MediaImage | null {
   return img ? withCaptionOverride(img) : null;
 }
 
+// A category's name comes from its FOLDER name by default
+// ("11-events-coverage" -> "Events Coverage"). That's fine until someone
+// wants to rename one, because renaming a folder through GitHub's website
+// is not really possible -- you'd have to re-path every photo inside it one
+// at a time. So edit-me/7-words-on-the-site.ts carries an override map:
+// the folder keeps its name, the SITE shows whatever is written there.
+// Anything not listed there just falls through to the folder-derived label.
+function withCategoryName(cat: Category): Category {
+  const override = (rawWords?.categoryNames ?? {})[cat.slug];
+  const label = typeof override === "string" ? override.trim() : "";
+  return label ? { ...cat, label } : cat;
+}
+
 export function getCategories(): Category[] {
   return loadManifest().categories.map((cat) => ({
-    ...cat,
+    ...withCategoryName(cat),
     images: cat.images.map(withCaptionOverride),
   }));
 }

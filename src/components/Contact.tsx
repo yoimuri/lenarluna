@@ -63,13 +63,13 @@ function PhoneMark() {
 // plain <a> (or plain copyable text): it cannot silently fail, costs
 // nothing, and will still work in five years.
 export default function Contact() {
-  const { you, contactIntro } = getSiteContent();
+  const { you, contactIntro, words } = getSiteContent();
   const igUrl = you.instagramHandle ? `https://instagram.com/${you.instagramHandle}` : "";
 
   const links = [
-    igUrl && { label: "INSTAGRAM", value: `@${you.instagramHandle}`, href: igUrl, mark: <InstagramMark /> },
+    igUrl && { label: words.contact.instagramLabel, value: `@${you.instagramHandle}`, href: igUrl, mark: <InstagramMark /> },
     you.phonePublic &&
-      you.phone && { label: "PHONE", value: you.phone, href: `tel:${you.phone}`, mark: <PhoneMark /> },
+      you.phone && { label: words.contact.phoneLabel, value: you.phone, href: `tel:${you.phone}`, mark: <PhoneMark /> },
   ].filter(Boolean) as { label: string; value: string; href: string; mark: React.ReactNode }[];
 
   return (
@@ -77,7 +77,7 @@ export default function Contact() {
       <Reveal>
         <div className="grid grid-cols-1 items-start gap-9 lg:grid-cols-12">
           <div className="lg:col-span-6">
-            <SectionHeader number="05" label="CONTACT" />
+            <SectionHeader number="05" label={words.contact.smallLabel} />
             <h2 className="font-display text-[2.2rem] font-black uppercase leading-[0.96] tracking-[-0.035em] sm:text-[2.9rem]">
               {you.contactHeading}
             </h2>
@@ -101,7 +101,7 @@ export default function Contact() {
               >
                 <FacebookMark />
                 <span className="flex-grow select-none font-mono text-[11px] font-bold tracking-[0.16em]">
-                  MESSAGE ON FACEBOOK
+                  {words.contact.facebookButton}
                 </span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7" />
@@ -115,7 +115,7 @@ export default function Contact() {
                 compose there than copy the address. */}
             {you.email && (
               <CopyField
-                label="EMAIL"
+                label={words.contact.emailLabel}
                 value={you.email}
                 mark={<GmailMark />}
                 markHref="https://mail.google.com/"

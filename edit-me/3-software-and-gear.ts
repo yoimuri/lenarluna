@@ -1,14 +1,9 @@
 // ============================================================================
-// SOFTWARE AND GEAR
+// SOFTWARE AND GEAR -- the two lists in your About section.
 // ============================================================================
-// Two separate lists: the software you edit with, and the gear you shoot
-// with. They show as two separate boxes in the About section.
-//
-// To add one: copy a whole { ... } line, paste it above or below, then
-// change the words inside the quote marks. Keep the comma at the end.
-// To remove one: delete its whole { ... } line.
-// If you empty out a whole list, that box just disappears -- no empty
-// heading left behind.
+// To add one: copy a whole { ... } line and change the words.
+// To remove one: delete its { ... } line.
+// Empty a whole list and that box disappears.
 // ============================================================================
 
 export const software = [
@@ -23,9 +18,4 @@ export const gear: { name: string; use: string }[] = [
   { name: "Sony FE 28-60mm f/4-5.6", use: "Lens" },
   { name: "Sony FE 50mm  f/1.8", use: "Lens" },
   { name: "Yongnuo E 11mm f/1.8", use: "Lens" },
-  // Nothing real here yet -- add your camera body, lenses, and lighting as you
-  // like. Examples:
-  // { name: "Fujifilm X-S10", use: "Camera body" },
-  // { name: "18-55mm kit lens", use: "Lens" },
-  // { name: "Godox lighting", use: "Lighting" },
 ];

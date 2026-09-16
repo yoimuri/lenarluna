@@ -61,12 +61,33 @@ async function listImageFiles(dir) {
 // Caption resolution, AD-09 step 2 only (filename words). The captions.ts
 // override (step 1) is layered on top of this at render time in
 // src/lib/media.ts -- see the note at the top of this file.
+// A word that looks like part of a camera's own filename rather than a word
+// a person chose: "dscf6322", "lnr00344", "b13", "20240723".
+const CAMERA_CODE_RE = /^[a-z]{1,5}[_-]?\d{2,}([_-]\d+)*$|^\d{6,}$/i;
+// Prefixes a camera puts in front of the numbers, on their own.
+const CAMERA_PREFIX_RE = /^(img|dsc|dscf|pxl|mvi|vid|photo|pic)$/i;
+
+// Photos straight off a camera are named things like "03--DSCF6356.jpg". The
+// filename rule below would turn that into the caption "DSCF6356", which is
+// worse than no caption at all -- so we detect that shape and show nothing
+// instead. Only the FIRST word is judged, because that's where a camera puts
+// its code; a deliberate name like "2 for Php250 Promo" keeps its caption.
+// Anything caught here can still be given a real caption by hand in
+// edit-me/5-captions.ts, which always wins.
+function looksLikeCameraFilename(words) {
+  const parts = words.trim().split(/\s+/);
+  if (parts.length === 0) return false;
+  if (CAMERA_CODE_RE.test(parts[0])) return true;
+  return CAMERA_PREFIX_RE.test(parts[0]) && parts.length > 1 && CAMERA_CODE_RE.test(parts[1]);
+}
+
 function resolveFilenameCaption(filename, allowCaption) {
   if (!allowCaption) return { caption: "" };
 
   const match = filename.match(FILENAME_RE);
   if (match) {
     const words = match[2].replace(/-/g, " ");
+    if (looksLikeCameraFilename(words)) return { caption: "" };
     const caption = words.charAt(0).toUpperCase() + words.slice(1);
     return { caption };
   }

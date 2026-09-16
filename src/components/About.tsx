@@ -16,14 +16,14 @@ function initials(name: string): string {
 // reaches this far they've decided they like the work and now want the
 // person. See BUILD-SPEC.md section 4.
 export default function About() {
-  const { you, about, software, gear } = getSiteContent();
+  const { you, about, software, gear, words } = getSiteContent();
   const photo = getAboutPhoto();
   const src = photo ? displaySrc(photo) : undefined;
 
   return (
     <section id="about" className="px-5 py-16 sm:px-13 sm:py-22">
       <Reveal>
-        <SectionHeader number="02" label="ABOUT" />
+        <SectionHeader number="02" label={words.about.smallLabel} />
       </Reveal>
 
       <div className="grid grid-cols-1 gap-9 lg:grid-cols-12 lg:items-start">
@@ -74,7 +74,7 @@ export default function About() {
           {about.extendedBio && (
             <div className="mt-9 border-t border-ink-700 pt-6">
               <div className="mb-3 select-none font-mono text-[10px] tracking-[0.22em] text-muted-400">
-                MORE ABOUT HIM
+                {words.about.moreAboutLabel}
               </div>
               <div className="max-w-[62ch] text-[15px] leading-[1.85] text-muted-400">
                 {about.extendedBio.split(/\n\s*\n/).map((para, i) => (

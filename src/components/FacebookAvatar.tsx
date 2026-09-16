@@ -1,5 +1,6 @@
 import { ZoomTrigger } from "./PhotoViewer";
 import { largestSrc, thumbSrc } from "@/lib/media";
+import { getSiteContent } from "@/lib/content";
 import type { MediaImage } from "@/lib/types";
 
 // The Facebook-profile-picture gag: a round picture breaking the cover
@@ -9,6 +10,7 @@ import type { MediaImage } from "@/lib/types";
 export default function FacebookAvatar({ photo, name }: { photo: MediaImage; name: string }) {
   // Two different files on purpose: a small one to draw the 150px circle,
   // the biggest one for the viewer it opens into.
+  const { words } = getSiteContent();
   const src = thumbSrc(photo);
   const fullSrc = largestSrc(photo);
   if (!src) return null;
@@ -34,7 +36,7 @@ export default function FacebookAvatar({ photo, name }: { photo: MediaImage; nam
       </div>
       <div className="pb-3 sm:pb-4">
         <div className="select-none font-mono text-[10px] font-bold tracking-[0.26em] text-gold-500/90">
-          THE MAN HIMSELF
+          {words.smallLabels.profileTag}
         </div>
       </div>
     </div>

@@ -7,7 +7,7 @@ import VideoGrid from "./VideoGrid";
 // the archive (AD-10). Renders nothing at all if there are no videos yet --
 // see Nav.tsx for the matching nav-button hide. See BUILD-SPEC.md section 4.
 export default function Videos() {
-  const { videos, videosIntro } = getSiteContent();
+  const { videos, videosIntro, words } = getSiteContent();
   if (videos.length === 0) return null;
 
   return (
@@ -15,9 +15,9 @@ export default function Videos() {
       <Reveal>
         <div className="mb-7 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div>
-            <SectionHeader number="04" label="VIDEOS" />
+            <SectionHeader number="04" label={words.videos.smallLabel} />
             <h2 className="font-display text-[2.2rem] font-black uppercase leading-[0.96] tracking-[-0.035em] sm:text-[2.9rem]">
-              Work That Moves
+              {words.videos.heading}
             </h2>
           </div>
           {videosIntro && (

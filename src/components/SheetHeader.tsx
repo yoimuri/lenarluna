@@ -5,14 +5,14 @@ import { getBestWork, getTotalPhotos } from "@/lib/media";
 // how many frames. This strip is the site's signature device; it exists in
 // none of the reference sites. See BUILD-SPEC.md section 4, "3. Sheet header".
 export default function SheetHeader() {
-  const { you } = getSiteContent();
+  const { you, words } = getSiteContent();
   const frames = getTotalPhotos() + getBestWork().length;
 
   const cells = [
-    { label: "BASED", value: you.city || "—" },
-    { label: "SHOOTING SINCE", value: you.since || "—" },
-    { label: "FRAMES ON FILE", value: String(frames) },
-    { label: "STATUS", value: you.status || "—", gold: true },
+    { label: words.smallLabels.based, value: you.city || "—" },
+    { label: words.smallLabels.shootingSince, value: you.since || "—" },
+    { label: words.smallLabels.framesOnFile, value: String(frames) },
+    { label: words.smallLabels.status, value: you.status || "—", gold: true },
   ];
 
   return (

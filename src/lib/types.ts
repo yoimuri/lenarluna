@@ -80,3 +80,35 @@ export type MediaManifest = {
   totalPhotos: number;
   warnings: string[];
 };
+
+/**
+ * Every fixed word on the site that isn't Lenar's own content -- menu items,
+ * section titles, small grey labels, category display names. Lives in
+ * edit-me/7-words-on-the-site.ts. See AD-16.
+ */
+export type SiteWords = {
+  menu: { highlights: string; about: string; gallery: string; videos: string; contact: string };
+  highlights: { smallLabel: string; heading: string };
+  about: { smallLabel: string; moreAboutLabel: string };
+  serviceIndex: { title: string };
+  gallery: { smallLabel: string; heading: string; allTabLabel: string };
+  categoryNames: Record<string, string>;
+  videos: { smallLabel: string; heading: string };
+  contact: {
+    smallLabel: string;
+    facebookButton: string;
+    emailLabel: string;
+    instagramLabel: string;
+    phoneLabel: string;
+  };
+  smallLabels: {
+    based: string;
+    shootingSince: string;
+    framesOnFile: string;
+    status: string;
+    softwareUsed: string;
+    gearUsed: string;
+    profileTag: string;
+    backToTop: string;
+  };
+};

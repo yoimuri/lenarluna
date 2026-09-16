@@ -17,8 +17,8 @@ Everything on the site comes from one of two places:
 
 1. **`public/photos`** — your photos, sorted into folders by where they show up
    on the page.
-2. **`edit-me`** — five small text files with your name, your words, your video
-   links, and your photo captions.
+2. **`edit-me`** — small text files with your name, your words, your video
+   links, your photo captions, and every heading and label on the site.
 
 You never need to open anything else.
 
@@ -88,14 +88,6 @@ photo in between two others later without renaming everything.
 you haven't uploaded anything to a category yet, that tab simply isn't there.
 Add one photo and the tab appears.
 
-**Want a brand-new gallery category?** Make a new folder inside `5-gallery`,
-name it like the others (a number, a dash, then the category name — for example
-`12-maternity`), and upload photos into it. The tab appears on its own.
-
-**Photo size:** around 1 to 2 MB each is ideal. If your photos come off the
-camera at 8 MB, that's bigger than the website needs — the site shrinks them
-automatically either way, but smaller originals upload faster.
-
 ### Deleting or reordering a photo
 
 - **Delete:** open the photo, click the trash can icon, commit changes.
@@ -126,7 +118,86 @@ Every photo can have a caption this way. None of them have to.
 
 ---
 
+## Adding or removing a whole category
+
+A "category" is one tab in your Gallery, and one row in the Index of services
+list. Each one is just a folder inside `public/photos/5-gallery`.
+
+### To ADD a category
+
+The site works this out from the folders, so you make a folder and you're done.
+
+1. On your computer, make a folder named like the others: **a number, a dash,
+   then the name** — for example `12-maternity`. Put the photos inside it.
+2. On GitHub, open `public/photos/5-gallery`.
+3. Click **Add file** → **Upload files**.
+4. **Drag the whole folder** from your computer onto the page. GitHub keeps the
+   folder name.
+5. Scroll down and click **Commit changes**.
+
+Wait about a minute, refresh your site. The new tab is there, and so is the new
+row in the Index of services. You don't have to tell the site it exists.
+
+It will be named after the folder — `12-maternity` shows up as "Maternity". If
+you want it to say something different, open
+`edit-me/7-words-on-the-site.ts`, find the category list, and add one line:
+
+```
+"12-maternity": "Maternity & Newborn",
+```
+
+### To REMOVE a category
+
+**Delete the photos inside it.** Once a category's folder has no photos left,
+the category disappears from the site on its own — the tab goes, and so does
+its row in the Index of services.
+
+1. Open the folder, click a photo, click the trash can icon, commit.
+2. Repeat until the folder is empty.
+
+(On GitHub a folder can't sit there empty — deleting the last photo removes the
+folder too. That's normal, and it's exactly what you want here.)
+
+If that category had a line in `7-words-on-the-site.ts`, you can leave it or
+delete it. A line pointing at a category that no longer exists is ignored and
+will **not** break anything.
+
+### To REORDER the categories
+
+That comes from the **number at the front of the folder name** — `01` shows
+first, then `02`, and so on. To move one, rename its folder so it has a
+different number.
+
+### To RENAME a category
+
+Don't rename the folder — that's the hard way, and GitHub makes it painful.
+Change the words in `edit-me/7-words-on-the-site.ts` instead. See the section
+above.
+
+**Photo size:** around 1 to 2 MB each is ideal. If your photos come off the
+camera at 8 MB, that's bigger than the website needs — the site shrinks them
+automatically either way, but smaller originals upload faster.
+
+---
+
 ## Add a video
+
+> **Your video section is switched off at the moment.** It's hidden, not
+> broken — the Videos button is gone from your menu too, and visitors just
+> don't see that part of the site.
+>
+> **Why:** the videos used music you don't hold the rights to. YouTube
+> silences the music on videos like that, and Facebook blocks them from
+> showing on your own website entirely (we tested your 60th-birthday reel —
+> Facebook refused it). Changing video sites doesn't fix it; changing the
+> music does.
+>
+> **To switch it back on:** re-edit with music that's cleared for use — the
+> free **Facebook Sound Collection** or **YouTube Audio Library** both work —
+> upload it to YouTube, then follow the steps written at the top of
+> `edit-me/4-videos.ts`. Your old links are saved in that file, so nothing is
+> lost. The section and its menu button come back on their own.
+
 
 Videos don't go in this website at all — they go on YouTube, and the site links
 to them. That means no size limit and no length limit.
@@ -154,9 +225,44 @@ on the site until you add your first one.
 
 ---
 
+## "I can't find where to change this word"
+
+If you can see words on your site and you want them different, check these
+three places, in this order:
+
+1. **`edit-me/7-words-on-the-site.ts`** — the menu, every section heading,
+   your category names ("Kiddie Parties", "Corporate Events"), and the small
+   grey labels. That file is laid out in the SAME ORDER as your website, top
+   to bottom, so scroll it the way you scroll your site.
+2. **`edit-me/1-your-details.ts`** — your name, city, status, the quote, and
+   the Contact heading and paragraph.
+3. **`edit-me/2-about-you.ts`** — the About heading and your story.
+
+**Renaming a category** (the tabs in your Gallery, and the "Index of services"
+list) is done in `7-words-on-the-site.ts`, NOT by renaming the folder. Find the
+line with your folder's name on the left, and change the words on the right:
+
+```
+"11-events-coverage": "Events Coverage",
+```
+
+becomes
+
+```
+"11-events-coverage": "Event Coverage & Hosting",
+```
+
+Leave the left side exactly as it is — it has to keep matching the folder name.
+
+**You never need to edit anything in the `src` folder.** If a word you want
+isn't in one of the three files above, message Clint rather than editing the
+code — that's the one place where a small typo can stop your site updating.
+
+---
+
 ## Change your words
 
-Open the `edit-me` folder. There are five files, numbered in the order they
+Open the `edit-me` folder. The files are numbered in the order they
 appear on the site:
 
 | File | What it controls |
@@ -167,6 +273,7 @@ appear on the site:
 | `4-videos.ts` | your YouTube videos, and the line that introduces that section |
 | `5-captions.ts` | optional captions for individual photos |
 | `6-highlights.ts` | which photos appear in Highlights (optional — see below) |
+| `7-words-on-the-site.ts` | **every other word on the site** — the menu, section headings, your category names, and all the small grey labels |
 
 **The four boxes in About are fully yours.** Both halves can be changed: the
 big text AND the small grey wording under it. They are not fixed categories —

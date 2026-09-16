@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import type { SiteWords } from "@/lib/types";
 
-type NavLink = { href: string; label: string };
+type NavLink = { href: string; label: string; isContact?: boolean };
 
 // Square, hairlined, mono buttons -- the site's own language, not the
 // glass-pill look borrowed from the reference site in an earlier pass.
@@ -17,10 +18,12 @@ export default function Nav({
   name,
   siteUrl,
   hasVideos,
+  menu,
 }: {
   name: string;
   siteUrl: string;
   hasVideos: boolean;
+  menu: SiteWords["menu"];
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,12 +35,17 @@ export default function Nav({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Labels come from edit-me/7-words-on-the-site.ts. `isContact` is tracked
+  // as its own flag rather than by comparing the label to the word
+  // "Contact" -- the moment someone renames that menu item (or writes it in
+  // Tagalog), a string comparison would silently drop the gold styling on
+  // the one button that matters most.
   const links: NavLink[] = [
-    { href: "#selects", label: "Selects" },
-    { href: "#about", label: "About" },
-    { href: "#archive", label: "Gallery" },
-    ...(hasVideos ? [{ href: "#videos", label: "Videos" }] : []),
-    { href: "#contact", label: "Contact" },
+    { href: "#selects", label: menu.highlights },
+    { href: "#about", label: menu.about },
+    { href: "#archive", label: menu.gallery },
+    ...(hasVideos ? [{ href: "#videos", label: menu.videos }] : []),
+    { href: "#contact", label: menu.contact, isContact: true },
   ];
 
   function toTop(e: React.MouseEvent) {
@@ -90,7 +98,7 @@ export default function Nav({
               className={`px-4 py-2.5 font-mono text-[10px] tracking-[0.16em] transition-colors duration-fast ${
                 i < links.length - 1 ? "border-r border-bone-100/10" : ""
               } ${
-                link.label === "Contact"
+                link.isContact
                   ? "bg-gold-500 font-bold text-ink-900 hover:bg-bone-100"
                   : "text-bone-100/70 hover:bg-gold-500/12 hover:text-gold-500"
               }`}
@@ -122,7 +130,7 @@ export default function Nav({
               href={link.href}
               onClick={() => setMenuOpen(false)}
               className={`border-b border-ink-700 px-5 py-3.5 text-center font-mono text-[11px] tracking-[0.16em] ${
-                link.label === "Contact" ? "bg-gold-500 font-bold text-ink-900" : "text-bone-100/75"
+                link.isContact ? "bg-gold-500 font-bold text-ink-900" : "text-bone-100/75"
               }`}
             >
               {link.label.toUpperCase()}

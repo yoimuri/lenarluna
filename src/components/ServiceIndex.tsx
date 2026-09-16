@@ -1,4 +1,5 @@
 import { getCategories } from "@/lib/media";
+import { getSiteContent } from "@/lib/content";
 
 // Replaces the old scrolling marquee (removed -- it was the reference
 // site's most recognisable device, and its reduced-motion state broke into
@@ -10,6 +11,7 @@ import { getCategories } from "@/lib/media";
 // listens for: clicking a service scrolls to the Archive AND switches it to
 // that category, so the index is a way in rather than a list to admire.
 export default function ServiceIndex() {
+  const { words } = getSiteContent();
   const categories = getCategories();
   if (categories.length === 0) return null;
 
@@ -19,7 +21,7 @@ export default function ServiceIndex() {
   return (
     <div className="select-none px-5 pb-9 pt-16 sm:px-13 sm:pt-24">
       <div className="mb-4 border-b border-ink-700 pb-3">
-        <span className="font-mono text-[10px] tracking-[0.24em] text-muted-400">INDEX OF SERVICES</span>
+        <span className="font-mono text-[10px] tracking-[0.24em] text-muted-400">{words.serviceIndex.title}</span>
       </div>
       <div className="grid grid-cols-1 gap-x-13 sm:grid-cols-3">
         {columns.map((col, ci) => (

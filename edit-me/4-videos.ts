@@ -1,45 +1,42 @@
 // ============================================================================
-// VIDEOS
+// VIDEOS  --  this section is OFF right now
 // ============================================================================
-// Add a YouTube video to the site.
+// The list at the bottom is empty, so the video section and its VIDEOS menu
+// button are hidden. Nothing is broken.
 //
-// TO ADD A VIDEO:
-//   1. Copy a whole block, from the { down to the },
-//   2. Paste it under the last one,
-//   3. Change the link, the title, and the description.
-//   4. Keep every comma exactly where it is.
+// It's off because the music in those videos isn't licensed to you. YouTube
+// mutes videos like that, and Facebook blocks them from playing on your own
+// site. Switching video sites doesn't fix it -- changing the music does.
 //
-// `description` is optional -- a short line under the title saying what the
-// video is. Leave it out, or set it to "", and only the title shows.
-//
-// Any YouTube link works -- the long one, the short "youtu.be" one, or a
-// Shorts link. You do NOT need to upload a thumbnail -- it's pulled from
-// YouTube automatically. Nothing plays until someone clicks it, so the
-// page stays fast no matter how many videos you add.
-//
-// TO REMOVE A VIDEO: delete its whole block, from { down to },
+// TO TURN IT BACK ON:
+//   1. Re-edit with free, cleared music (Facebook Sound Collection, or the
+//      YouTube Audio Library).
+//   2. Upload it to YouTube. "Unlisted" is fine -- it still works here.
+//   3. Copy the link, then follow the instructions at the bottom.
 // ============================================================================
 
-// A short line that appears beside the "Work That Moves" heading, to say
-// what this section is. Change it to whatever you like.
-// Leave it as "" and no line appears at all.
+// The line beside the "Work That Moves" heading. "" means no line.
 export const intro = "My sample videos live here:";
 
 export const videos: { link: string; title: string; description?: string }[] = [
-  // ---- SAMPLE VIDEOS -- delete these three once your real ones are in ----
-  {
-    link: "https://www.facebook.com/reel/2072335826985799",
-    title: "Juliet's 60th Birthday",
-    description: "July 24, 2026",
-  },
-  {
-    link: "https://www.youtube.com/watch?v=JobpOg3Cceg",
-    title: "Sample — You Don't Know Me",
-    description: "Replace this with one of your own edits.",
-  },
-  {
-    link: "https://www.youtube.com/watch?v=60ItHLz5WEA",
-    title: "Sample — Faded",
-    description: "",
-  },
+  // TO ADD A VIDEO: delete the "//" in front of these 5 lines, then put your
+  // own link and title in. Copy the whole block again for a second video.
+  //
+
+  // tanggalin mo na lang 'to pag gusto mo na makita ang video sa site 
+  //{ 
+  //   link: "https://www.youtube.com/watch?v=YOUR-LINK-HERE",
+  //   title: "Juliet's 60th Birthday",
+  //   description: "July 24, 2026",
+  // },
+  //
+  // TO REMOVE A VIDEO: delete its block, from the {  down to the  },
+  // The description line is optional. Delete it and only the title shows.
+
+  // ---- Your old links, kept here so they aren't lost ----
+  // Facebook would not let this one play on your site:
+  //   https://www.facebook.com/reel/2072335826985799
+  // Samples that were never yours -- don't put these back:
+  //   https://www.youtube.com/watch?v=JobpOg3Cceg
+  //   https://www.youtube.com/watch?v=60ItHLz5WEA
 ];

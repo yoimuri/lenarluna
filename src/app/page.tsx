@@ -14,13 +14,13 @@ import Footer from "@/components/Footer";
 import ScrollEdgeFade from "@/components/ScrollEdgeFade";
 
 export default function Home() {
-  const { you, videos } = getSiteContent();
+  const { you, videos, words } = getSiteContent();
 
   return (
     <>
       <JsEnabled />
       <div id="top" />
-      <Nav name={you.name} siteUrl={you.siteUrl} hasVideos={videos.length > 0} />
+      <Nav name={you.name} siteUrl={you.siteUrl} hasVideos={videos.length > 0} menu={words.menu} />
       <ScrollEdgeFade />
       <PhotoViewerProvider>
         <main>

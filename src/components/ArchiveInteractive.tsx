@@ -25,11 +25,19 @@ function prefersReducedMotion() {
   return typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-export default function ArchiveInteractive({ categories, total }: { categories: Category[]; total: number }) {
+export default function ArchiveInteractive({
+  categories,
+  total,
+  allLabel,
+}: {
+  categories: Category[];
+  total: number;
+  allLabel: string;
+}) {
   const tabs: Tab[] = useMemo(() => {
     const all: MediaImage[] = categories.flatMap((c) => c.images);
-    return [{ slug: "all", label: "All", images: all }, ...categories];
-  }, [categories]);
+    return [{ slug: "all", label: allLabel, images: all }, ...categories];
+  }, [categories, allLabel]);
 
   const [selected, setSelected] = useState(0);
   const [visible, setVisible] = useState(PAGE_SIZE);

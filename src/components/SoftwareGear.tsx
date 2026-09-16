@@ -1,4 +1,5 @@
 import type { ToolItem } from "@/lib/types";
+import { getSiteContent } from "@/lib/content";
 
 // A handful of common editing tools get a recognisable monogram tile drawn
 // entirely in markup -- no vendor logo files, no external requests, no
@@ -46,6 +47,7 @@ function Monogram({ name }: { name: string }) {
 // The old single "toolkit" list, split into two so hardware and software
 // read apart at a glance. See BUILD-SPEC.md AD-12.
 export default function SoftwareGear({ software, gear }: { software: ToolItem[]; gear: ToolItem[] }) {
+  const { words } = getSiteContent();
   if (software.length === 0 && gear.length === 0) return null;
 
   return (
@@ -53,7 +55,7 @@ export default function SoftwareGear({ software, gear }: { software: ToolItem[];
       {software.length > 0 && (
         <div>
           <div className="mb-2.5 flex items-baseline justify-between border-b border-ink-700 pb-2.5">
-            <span className="font-mono text-[10px] tracking-[0.22em] text-muted-400">SOFTWARE USED</span>
+            <span className="font-mono text-[10px] tracking-[0.22em] text-muted-400">{words.smallLabels.softwareUsed}</span>
           </div>
           <div className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
             {software.map((tool) => (
@@ -72,7 +74,7 @@ export default function SoftwareGear({ software, gear }: { software: ToolItem[];
       {gear.length > 0 && (
         <div>
           <div className="mb-2.5 flex items-baseline justify-between border-b border-ink-700 pb-2.5">
-            <span className="font-mono text-[10px] tracking-[0.22em] text-muted-400">GEAR USED</span>
+            <span className="font-mono text-[10px] tracking-[0.22em] text-muted-400">{words.smallLabels.gearUsed}</span>
           </div>
           <div className="grid grid-cols-1 gap-x-8 sm:grid-cols-2">
             {gear.map((item, i) => (

@@ -18,7 +18,8 @@ import { you } from "../../edit-me/1-your-details";
 import { about } from "../../edit-me/2-about-you";
 import { software, gear } from "../../edit-me/3-software-and-gear";
 import { videos as rawVideos, intro as rawVideosIntro } from "../../edit-me/4-videos";
-import type { AboutYou, StatItem, ToolItem, VideoItem, YourDetails } from "./types";
+import { words as rawWords } from "../../edit-me/7-words-on-the-site";
+import type { AboutYou, SiteWords, StatItem, ToolItem, VideoItem, YourDetails } from "./types";
 import { extractYouTubeId } from "./youtube";
 
 function trim(s: unknown): string {
@@ -81,6 +82,83 @@ function normalizeAbout(): AboutYou {
   };
 }
 
+// Every word on the site that isn't Lenar's own content -- see
+// edit-me/7-words-on-the-site.ts. Each field falls back to the wording the
+// site shipped with, so a blanked-out or deleted line degrades to the
+// original word instead of rendering an empty heading. Same fail-soft rule
+// as the rest of this file: a mistake in an edit-me file should never be
+// able to leave a hole in the page.
+function pick(value: unknown, fallback: string): string {
+  return trim(value) || fallback;
+}
+
+function normalizeWords(): SiteWords {
+  const w = (rawWords ?? {}) as Record<string, Record<string, unknown>>;
+  const menu = w.menu ?? {};
+  const highlights = w.highlights ?? {};
+  const about = w.about ?? {};
+  const serviceIndex = w.serviceIndex ?? {};
+  const gallery = w.gallery ?? {};
+  const videos = w.videos ?? {};
+  const contact = w.contact ?? {};
+  const small = w.smallLabels ?? {};
+
+  // Category display names: drop any blank value so the folder-derived
+  // label shows through instead of an empty tab.
+  const rawNames = (w.categoryNames ?? {}) as Record<string, unknown>;
+  const categoryNames: Record<string, string> = {};
+  for (const [slug, label] of Object.entries(rawNames)) {
+    const clean = trim(label);
+    if (clean) categoryNames[slug] = clean;
+  }
+
+  return {
+    menu: {
+      highlights: pick(menu.highlights, "Selects"),
+      about: pick(menu.about, "About"),
+      gallery: pick(menu.gallery, "Gallery"),
+      videos: pick(menu.videos, "Videos"),
+      contact: pick(menu.contact, "Contact"),
+    },
+    highlights: {
+      smallLabel: pick(highlights.smallLabel, "SELECTS"),
+      heading: pick(highlights.heading, "Highlights"),
+    },
+    about: {
+      smallLabel: pick(about.smallLabel, "ABOUT"),
+      moreAboutLabel: pick(about.moreAboutLabel, "MORE ABOUT HIM"),
+    },
+    serviceIndex: { title: pick(serviceIndex.title, "INDEX OF SERVICES") },
+    gallery: {
+      smallLabel: pick(gallery.smallLabel, "GALLERY"),
+      heading: pick(gallery.heading, "Explore Highlights by Category"),
+      allTabLabel: pick(gallery.allTabLabel, "All"),
+    },
+    categoryNames,
+    videos: {
+      smallLabel: pick(videos.smallLabel, "VIDEOS"),
+      heading: pick(videos.heading, "Work That Moves"),
+    },
+    contact: {
+      smallLabel: pick(contact.smallLabel, "CONTACT"),
+      facebookButton: pick(contact.facebookButton, "MESSAGE ON FACEBOOK"),
+      emailLabel: pick(contact.emailLabel, "EMAIL"),
+      instagramLabel: pick(contact.instagramLabel, "INSTAGRAM"),
+      phoneLabel: pick(contact.phoneLabel, "PHONE"),
+    },
+    smallLabels: {
+      based: pick(small.based, "BASED"),
+      shootingSince: pick(small.shootingSince, "SHOOTING SINCE"),
+      framesOnFile: pick(small.framesOnFile, "FRAMES ON FILE"),
+      status: pick(small.status, "STATUS"),
+      softwareUsed: pick(small.softwareUsed, "SOFTWARE USED"),
+      gearUsed: pick(small.gearUsed, "GEAR USED"),
+      profileTag: pick(small.profileTag, "THE MAN HIMSELF"),
+      backToTop: pick(small.backToTop, "BACK TO TOP"),
+    },
+  };
+}
+
 function normalizeTools(list: ToolItem[]): ToolItem[] {
   if (!Array.isArray(list)) return [];
   return list
@@ -123,6 +201,7 @@ let cached: {
   videos: VideoItem[];
   videosIntro: string;
   contactIntro: string;
+  words: SiteWords;
 } | null = null;
 
 export function getSiteContent() {
@@ -135,6 +214,7 @@ export function getSiteContent() {
       videos: normalizeVideos(),
       videosIntro: trim(rawVideosIntro),
       contactIntro: normalizeYou().contactIntro,
+      words: normalizeWords(),
     };
     // A dropped video (a link that doesn't look like YouTube) used to fail
     // completely silently -- getContentWarnings() existed but nothing ever
