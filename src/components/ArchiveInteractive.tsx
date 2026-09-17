@@ -195,6 +195,21 @@ export default function ArchiveInteractive({
   }
 
   const shown = current.images.slice(0, visible);
+  // True once the visitor has loaded past the first page, which is what makes
+  // SHOW LESS worth offering.
+  const expanded = visible > PAGE_SIZE;
+
+  // Collapsing from the bottom of a long grid would leave the visitor floating
+  // in whitespace far below the photos, so send them back to the top of the
+  // grid as it shrinks.
+  function collapse() {
+    setVisible(PAGE_SIZE);
+    setActiveIndex(0);
+    document.getElementById("archive")?.scrollIntoView({
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+      block: "start",
+    });
+  }
   const viewerImages = current.images.map(toViewerImage);
   const remaining = current.images.length - shown.length;
 
@@ -320,22 +335,44 @@ export default function ArchiveInteractive({
         </p>
       )}
 
-      {remaining > 0 && (
-        <div className="mt-6 flex justify-center gap-2.5">
-          <button
-            type="button"
-            onClick={() => setVisible((v) => Math.min(current.images.length, v + LOAD_MORE))}
-            className="select-none border border-ink-700 px-6 py-3 font-mono text-[10px] tracking-[0.18em] transition-colors duration-fast hover:border-gold-500 hover:text-gold-500"
-          >
-            LOAD {Math.min(LOAD_MORE, remaining)} MORE
-          </button>
-          <button
-            type="button"
-            onClick={() => setVisible(current.images.length)}
-            className="select-none border border-gold-500 bg-gold-500/10 px-6 py-3 font-mono text-[10px] tracking-[0.18em] text-gold-500 transition-colors duration-fast hover:bg-gold-500/20"
-          >
-            LOAD ALL {current.images.length}
-          </button>
+      {/* The row used to be wrapped in `remaining > 0` alone, which meant that
+          the moment everything was loaded the whole row vanished and there was
+          no way back to a short grid -- you were stuck scrolling past every
+          photo. `expanded` tracks whether the visitor has gone past the
+          default page, so SHOW LESS can stay available after LOAD ALL. */}
+      {(remaining > 0 || expanded) && (
+        <div className="mt-6 flex flex-wrap justify-center gap-2.5">
+          {remaining > 0 && (
+            <>
+              <button
+                type="button"
+                onClick={() => setVisible((v) => Math.min(current.images.length, v + LOAD_MORE))}
+                className="select-none border border-ink-700 px-6 py-3 font-mono text-[10px] tracking-[0.18em] transition-colors duration-fast hover:border-gold-500 hover:text-gold-500"
+              >
+                LOAD {Math.min(LOAD_MORE, remaining)} MORE
+              </button>
+              <button
+                type="button"
+                onClick={() => setVisible(current.images.length)}
+                className="select-none border border-gold-500 bg-gold-500/10 px-6 py-3 font-mono text-[10px] tracking-[0.18em] text-gold-500 transition-colors duration-fast hover:bg-gold-500/20"
+              >
+                LOAD ALL {current.images.length}
+              </button>
+            </>
+          )}
+
+          {expanded && (
+            <button
+              type="button"
+              onClick={collapse}
+              className="flex select-none items-center gap-2 border border-ink-700 px-6 py-3 font-mono text-[10px] tracking-[0.18em] text-muted-400 transition-colors duration-fast hover:border-gold-500 hover:text-gold-500"
+            >
+              SHOW LESS
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="rotate-180">
+                <path d="M12 5v14M5 12l7 7 7-7" />
+              </svg>
+            </button>
+          )}
         </div>
       )}
     </div>
