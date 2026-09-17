@@ -12,7 +12,7 @@ export const about = {
 
   // The longer version, further down the page. "" hides it completely.
   extendedBio:
-    "I use camera to take pictures and videos. I use my camera to capture the world around me, to tell stories, and to create art. I am passionate about photography and videography, and I am always looking for new ways to improve my skills and to create better work. I am also a video editor, and I enjoy editing videos to create compelling narratives and to bring my vision to life. I am always looking for new opportunities to collaborate with other creatives and to push the boundaries of what is possible with photography and videography.",
+    "I use camera to capture the world around me, to tell stories, and to create art. I am passionate about photography and videography, and I am always looking for new ways to improve my skills and to create better work. I am also a video editor, and I enjoy editing videos to create compelling narratives and to bring my vision to life. I am always looking for new opportunities to collaborate with other creatives and to push the boundaries of what is possible with photography and videography.",
 
   // The small number boxes. Empty right now, so they don't show.
   // To use them, add lines between the [ and ] like this:
