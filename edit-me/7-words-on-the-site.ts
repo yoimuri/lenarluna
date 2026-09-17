@@ -69,7 +69,7 @@ export const words = {
     "08-corporate-events": "Corporate Events",
     "09-portraits": "Portraits",
     "10-graduation": "Graduation",
-    "11-events-coverage": "Events Coverage",
+    "11-events-coverage": "Client Showcase",
   } as Record<string, string>,
 
   // ---- Section 4: Videos (currently hidden -- see 4-videos.ts) ----
