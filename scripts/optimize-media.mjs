@@ -14,7 +14,7 @@
 // every build, never committed. See BUILD-SPEC.md section 9.
 
 import { readdir, mkdir, writeFile } from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 
@@ -190,7 +190,31 @@ async function processMany(folderRelPath, opts) {
   const files = await listImageFiles(dir);
   const images = [];
   for (const file of files) {
-    images.push(await processImage(folderRelPath, file, opts));
+    // One unreadable file must not take the whole site down with it. A photo
+    // that isn't really a photo -- an empty file made by GitHub's "Create new
+    // file" button, a download that stopped halfway, a .jpg that is secretly
+    // something else -- used to throw here and kill the entire build, with an
+    // error that never said WHICH file. Now it is skipped, named clearly in
+    // the warnings, and every other photo still publishes. Same fail-soft
+    // rule the edit-me files follow: one mistake should cost one photo, not
+    // the whole update.
+    try {
+      images.push(await processImage(folderRelPath, file, opts));
+    } catch (err) {
+      const relPath = path.join(folderRelPath, file);
+      let size = "unknown size";
+      try {
+        size = `${statSync(path.join(dir, file)).size} bytes`;
+      } catch {}
+      warnings.push(
+        `SKIPPED ${relPath} (${size}) -- this file isn't a readable image, so it ` +
+          `will NOT appear on the site. The rest of your photos are fine. ` +
+          `Most likely it was made with GitHub's "Create new file" button ` +
+          `(which makes an empty text file) instead of "Upload files", or the ` +
+          `upload didn't finish. Fix: delete it, then re-upload the real photo ` +
+          `with Add file > Upload files. [${err.message}]`
+      );
+    }
   }
   images.sort((a, b) => a.order - b.order || a.file.localeCompare(b.file));
   return images;
