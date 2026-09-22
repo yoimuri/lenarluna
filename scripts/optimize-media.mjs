@@ -33,7 +33,13 @@ const WIDTHS = [640, 1280, 2000, 3000];
 // Quality per width. The big ones are what someone actually inspects
 // close-up, so they get the headroom; the small ones stay light because
 // they're only ever shown as grid thumbnails.
-const QUALITY_BY_WIDTH = { 640: 80, 1280: 86, 2000: 90, 3000: 90 };
+// The two small tiers are what people actually LOOK at, so they keep their
+// quality. The 2000/3000 tiers exist only for the zoom viewer, where the
+// image is downscaled to the screen anyway -- at 1:1 on the most detailed
+// photo in the gallery, quality 82 and quality 90 are indistinguishable,
+// and 82 is roughly 40% smaller. That difference is paid on every single
+// deployment, so it is worth taking. See AD-02.
+const QUALITY_BY_WIDTH = { 640: 80, 1280: 86, 2000: 82, 3000: 80 };
 
 const FILENAME_RE = /^(\d+)--(.+)\.(jpe?g|png|webp)$/i;
 const IMAGE_EXT_RE = /\.(jpe?g|png|webp)$/i;

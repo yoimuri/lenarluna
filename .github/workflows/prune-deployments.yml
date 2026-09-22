@@ -1,0 +1,60 @@
+# Keeps Vercel Deployment Storage flat.
+#
+# NOTE: Vercel DOES clean up on its own -- Hobby projects default to 30-day
+# retention, and always keep the last 3 deployments. So this workflow is a
+# belt-and-braces measure, not the primary fix. The primary fix is the
+# project's own retention setting (Project > Settings > Security >
+# Deployment Retention Policy), which needs no token and no code.
+#
+# This workflow is still useful because it deletes immediately, whereas
+# Vercel's background job can take up to 48 hours after a deployment
+# becomes eligible. If the retention policy alone keeps you under quota,
+# you can delete this file.
+#
+# SETUP (one time, see CLINT-RUNBOOK.md):
+#   Repo Settings > Secrets and variables > Actions > New repository secret
+#     VERCEL_TOKEN       from vercel.com/account/tokens
+#     VERCEL_PROJECT_ID  from Vercel > Project > Settings > General
+#     VERCEL_TEAM_ID     only if the project sits under a team, else skip
+name: Prune old Vercel deployments
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Daily safety net at 18:00 UTC (02:00 Manila), in case a push-run was
+    # skipped or raced the build.
+    - cron: "0 18 * * *"
+  workflow_dispatch: # lets you run it by hand from the Actions tab
+
+# If several pushes land at once (Lenar uploading photo after photo), only
+# run the newest -- no point pruning three times in a row.
+concurrency:
+  group: prune-deployments
+  cancel-in-progress: true
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Vercel's build for this same push is still running when the push
+      # trigger fires. Waiting lets the new deployment exist and go READY
+      # first, so it is counted among the ones we keep rather than being
+      # invisible to the script.
+      - name: Wait for the new deployment to finish building
+        if: github.event_name == 'push'
+        run: sleep 180
+
+      - name: Prune
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+          KEEP: "3" # the live one plus two working rollback targets
+        run: node scripts/prune-deployments.mjs --yes

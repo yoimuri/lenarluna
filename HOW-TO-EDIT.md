@@ -38,10 +38,20 @@ You never need to open anything else.
    | `5-gallery/...` | your full galleries — one folder per category |
 
 2. Click the **Add file** button, then **Upload files**.
-3. Drag your photo in, or click to choose it from your computer.
+3. **Drag in ALL the photos you want to add, at the same time.** You can select
+   many at once -- you do not have to do them one by one.
 4. Scroll down, type anything in the little message box (it doesn't matter what),
    and click **Commit changes**.
-5. Wait about a minute. Refresh your website. The photo is there.
+5. Wait about a minute. Refresh your website. The photos are there.
+
+> **Please upload in batches, not one at a time.** Every time you click
+> **Commit changes**, your website rebuilds itself from scratch and keeps a copy
+> of that whole build. Ten photos uploaded together = one rebuild. The same ten
+> uploaded one by one = ten rebuilds, and ten stored copies of your entire site.
+>
+> That is what used up the free hosting allowance once already. Same photos, same
+> result on the site -- just far less waste. Renaming files counts too, so if you
+> are fixing several names, it is worth doing them in one sitting.
 
 ### `1-cover-photo`, `2-profile-picture`, `4-about-photo` only ever hold ONE photo
 
