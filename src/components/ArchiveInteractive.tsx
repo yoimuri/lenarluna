@@ -229,16 +229,26 @@ export default function ArchiveInteractive({
 
   return (
     <div>
-      {/* wrapped category tabs -- never a horizontally-scrolling row (that
-          overflowed by a measured 593px in an earlier pass). */}
-      <div className="mb-6 grid select-none grid-cols-2 gap-px border border-ink-700 bg-ink-700 sm:grid-cols-4 lg:grid-cols-6">
+      {/* Wrapped category tabs -- never a horizontally-scrolling row (that
+          overflowed by a measured 593px in an earlier pass).
+
+          The hairlines are drawn by the CELLS, not by painting the container
+          and letting a background show through gaps. That older trick left a
+          visible translucent block wherever the last row came up short --
+          11 categories in a 6-wide grid leaves one empty slot, and the slot
+          was showing the container's paint. Now an empty slot draws nothing
+          at all, so the grid stays clean at any number of categories and at
+          every breakpoint (2 / 4 / 6 columns). The container supplies only
+          the top and left edges; each cell closes its own right and bottom,
+          which means the last cell of a short row finishes the row itself. */}
+      <div className="mb-6 grid select-none grid-cols-2 border-l border-t border-ink-700 sm:grid-cols-4 lg:grid-cols-6">
         {tabs.map((tab, i) => (
           <button
             key={tab.slug}
             type="button"
             onClick={() => goTo(i)}
-            className={`px-3 py-3 text-left transition-colors duration-fast ${
-              i === selected ? "border-b-2 border-gold-500 bg-ink-700" : "bg-ink-900 hover:bg-ink-800"
+            className={`relative border-b border-r border-ink-700 px-3 py-3 text-left transition-colors duration-fast ${
+              i === selected ? "bg-ink-700" : "bg-ink-900 hover:bg-ink-800"
             }`}
           >
             <div className={`truncate text-[11px] font-bold uppercase ${i === selected ? "text-bone-100" : "text-muted-400"}`}>
@@ -247,6 +257,12 @@ export default function ArchiveInteractive({
             <div className={`mt-1 font-mono text-[9px] ${i === selected ? "text-gold-500" : "text-muted-400"}`}>
               {String(tab.images.length).padStart(2, "0")}
             </div>
+            {/* The gold underline sits on top of the cell rather than being a
+                thicker bottom border, so selecting a tab doesn't make it 1px
+                taller than its neighbours and nudge the whole row. */}
+            {i === selected && (
+              <span className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] bg-gold-500" />
+            )}
           </button>
         ))}
       </div>

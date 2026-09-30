@@ -1,42 +1,32 @@
 // ============================================================================
-// VIDEOS  --  this section is OFF right now
+// VIDEOS
 // ============================================================================
-// The list at the bottom is empty, so the video section and its VIDEOS menu
-// button are hidden. Nothing is broken.
+// Your videos live on Google Drive. The site just plays them -- no upload
+// limit, no size limit, and nothing gets muted for music.
 //
-// It's off because the music in those videos isn't licensed to you. YouTube
-// mutes videos like that, and Facebook blocks them from playing on your own
-// site. Switching video sites doesn't fix it -- changing the music does.
+// TO ADD A VIDEO:
+//   1. Upload it to your Google Drive.
+//   2. Right-click it -> Share -> under "General access" choose
+//      "Anyone with the link". THIS STEP IS REQUIRED. Without it, visitors
+//      get a "request access" screen instead of your video.
+//   3. Click Copy link.
+//   4. Paste it below in a block like the ones there, and change the title.
+//   5. Commit changes. Wait about a minute. Refresh.
 //
-// TO TURN IT BACK ON:
-//   1. Re-edit with free, cleared music (Facebook Sound Collection, or the
-//      YouTube Audio Library).
-//   2. Upload it to YouTube. "Unlisted" is fine -- it still works here.
-//   3. Copy the link, then follow the instructions at the bottom.
+// TO REMOVE A VIDEO: delete its block, from the {  down to the  },
+//
+// The description line is optional -- delete it and only the title shows.
+// YouTube links still work too, if you ever prefer one.
 // ============================================================================
 
 // The line beside the "Work That Moves" heading. "" means no line.
-export const intro = "My sample videos live here:";
+export const intro = "A few of my recent edits:";
 
 export const videos: { link: string; title: string; description?: string }[] = [
-  // TO ADD A VIDEO: delete the "//" in front of these 5 lines, then put your
-  // own link and title in. Copy the whole block again for a second video.
-  //
-
-  // tanggalin mo na lang 'to pag gusto mo na makita ang video sa site 
-  //{ 
-  //   link: "https://www.youtube.com/watch?v=YOUR-LINK-HERE",
-  //   title: "Juliet's 60th Birthday",
-  //   description: "July 24, 2026",
-  // },
-  //
-  // TO REMOVE A VIDEO: delete its block, from the {  down to the  },
-  // The description line is optional. Delete it and only the title shows.
-
-  // ---- Your old links, kept here so they aren't lost ----
-  // Facebook would not let this one play on your site:
-  //   https://www.facebook.com/reel/2072335826985799
-  // Samples that were never yours -- don't put these back:
-  //   https://www.youtube.com/watch?v=JobpOg3Cceg
-  //   https://www.youtube.com/watch?v=60ItHLz5WEA
+  // ---- Replace these with your own. Delete any you don't need. ----
+  {
+    link: "PASTE-YOUR-GOOGLE-DRIVE-LINK-HERE",
+    title: "Juliet's 60th Birthday",
+    description: "July 24, 2026",
+  },
 ];

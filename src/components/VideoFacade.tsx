@@ -1,24 +1,22 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { extractYouTubeId, youtubeEmbedUrl, youtubeThumbnail } from "@/lib/youtube";
+import type { VideoSource } from "@/lib/video";
+import { videoEmbedUrl, videoThumbnail, videoThumbnailFallback } from "@/lib/video";
 
 // YouTube's "no maxres available" placeholder decodes at 120px wide.
 // A real maxresdefault is 1280. Anything at or under this is the placeholder.
 const PLACEHOLDER_MAX_WIDTH = 120;
 
-// Poster image plus a play button; the real YouTube iframe only loads once
-// someone actually clicks. Keeps the page fast no matter how many videos
-// Lenar adds. See BUILD-SPEC.md section 7 and AD-11.
+// Poster image plus a play button; the real player only loads once someone
+// actually clicks. Keeps the page fast no matter how many videos Lenar adds.
+// See BUILD-SPEC.md section 7 and AD-11.
 //
 // Whether THIS card is playing is passed in, not owned locally -- see
-// VideoGrid.tsx. Every embed autoplays, so two of these mounted at once are
-// two autoplaying cross-origin iframes fighting for bandwidth/CPU, and the
-// second one stalls at "loading" instead of starting. Controlling "which one
-// is playing" from one place, one level up, is what makes starting a new
-// video stop the previous one instead of piling up.
-export default function YouTubeFacade({
-  link,
+// VideoGrid.tsx. Two players mounted at once fight for bandwidth and the
+// second one stalls, so "which one is playing" lives one level up.
+export default function VideoFacade({
+  source,
   title,
   description,
   index,
@@ -26,7 +24,7 @@ export default function YouTubeFacade({
   onPlay,
   onStop,
 }: {
-  link: string;
+  source: VideoSource;
   title: string;
   description?: string;
   index: number;
@@ -34,14 +32,13 @@ export default function YouTubeFacade({
   onPlay: () => void;
   onStop: () => void;
 }) {
-  const id = extractYouTubeId(link);
   const [posterFailed, setPosterFailed] = useState(false);
+  const [posterGone, setPosterGone] = useState(false);
 
   // Escape closes it too, matching the photo viewer. Note this listener can
   // only fire while focus is OUTSIDE the iframe -- once someone clicks into
-  // the YouTube player, key events belong to that cross-origin document and
-  // never reach us. The visible close button is the reliable route; this is
-  // a convenience on top of it, not a replacement for it.
+  // the player, key events belong to that cross-origin document and never
+  // reach us. The visible close button is the reliable route.
   useEffect(() => {
     if (!playing) return;
     const onKey = (e: KeyboardEvent) => {
@@ -51,13 +48,15 @@ export default function YouTubeFacade({
     return () => window.removeEventListener("keydown", onKey);
   }, [playing, onStop]);
 
-  if (!id) return null;
+  const fallback = videoThumbnailFallback(source);
+  const poster = posterFailed && fallback ? fallback : videoThumbnail(source);
 
-  // Not every video has a maxresdefault. When it's missing YouTube does NOT
-  // 404 -- it serves a 120x90 grey placeholder with HTTP 200, so `onError`
-  // never fires and you get a grey card instead of a thumbnail. Checking the
-  // decoded width is the only reliable way to catch it.
-  const poster = posterFailed ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : youtubeThumbnail(id);
+  function posterUnusable() {
+    // YouTube gets one retry at a smaller size; Drive has no second address,
+    // so a failure there goes straight to the drawn placeholder below.
+    if (!posterFailed && fallback) setPosterFailed(true);
+    else setPosterGone(true);
+  }
 
   return (
     <div>
@@ -65,17 +64,16 @@ export default function YouTubeFacade({
         {playing ? (
           <>
             <iframe
-              src={youtubeEmbedUrl(id)}
+              src={videoEmbedUrl(source)}
               title={title || "Video"}
               className="h-full w-full"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
             {/* Unmounting the iframe is what actually stops playback -- there
-                is no way to pause a cross-origin YouTube embed without
-                loading their player API, and that is a whole extra script
-                for one button. Tearing it down returns the card to a still
-                poster and leaves nothing running in the background. */}
+                is no way to pause a cross-origin embed without loading that
+                platform's player API. Tearing it down returns the card to a
+                still and leaves nothing running in the background. */}
             <button
               type="button"
               onClick={onStop}
@@ -94,18 +92,26 @@ export default function YouTubeFacade({
             className="group relative block h-full w-full"
             aria-label={`Play ${title || "video"}`}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={poster}
-              alt=""
-              onError={() => setPosterFailed(true)}
-              onLoad={(e) => {
-                if (!posterFailed && e.currentTarget.naturalWidth > 0 && e.currentTarget.naturalWidth <= PLACEHOLDER_MAX_WIDTH) {
-                  setPosterFailed(true);
-                }
-              }}
-              className="h-full w-full object-cover opacity-60 transition-opacity duration-base group-hover:opacity-75"
-            />
+            {/* Google Drive has no documented thumbnail guarantee the way
+                YouTube does, so a missing still is treated as normal rather
+                than as an error: the card falls back to its own dark panel
+                and still reads as a video. Never a broken-image icon. */}
+            {posterGone ? (
+              <span className="absolute inset-0 bg-gradient-to-br from-ink-800 to-ink-900" />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={poster}
+                alt=""
+                onError={posterUnusable}
+                onLoad={(e) => {
+                  if (e.currentTarget.naturalWidth > 0 && e.currentTarget.naturalWidth <= PLACEHOLDER_MAX_WIDTH) {
+                    posterUnusable();
+                  }
+                }}
+                className="h-full w-full object-cover opacity-60 transition-opacity duration-base group-hover:opacity-75"
+              />
+            )}
             <span className="absolute inset-0 flex items-center justify-center">
               <span className="flex h-14 w-14 items-center justify-center rounded-full bg-gold-500/90 shadow-[0_8px_30px_rgba(0,0,0,0.7)] transition-transform duration-fast group-hover:scale-105">
                 <svg width="19" height="19" viewBox="0 0 24 24" fill="#0F0F0A">

@@ -192,48 +192,29 @@ automatically either way, but smaller originals upload faster.
 
 ## Add a video
 
-> **Your video section is switched off at the moment.** It's hidden, not
-> broken — the Videos button is gone from your menu too, and visitors just
-> don't see that part of the site.
->
-> **Why:** the videos used music you don't hold the rights to. YouTube
-> silences the music on videos like that, and Facebook blocks them from
-> showing on your own website entirely (we tested your 60th-birthday reel —
-> Facebook refused it). Changing video sites doesn't fix it; changing the
-> music does.
->
-> **To switch it back on:** re-edit with music that's cleared for use — the
-> free **Facebook Sound Collection** or **YouTube Audio Library** both work —
-> upload it to YouTube, then follow the steps written at the top of
-> `edit-me/4-videos.ts`. Your old links are saved in that file, so nothing is
-> lost. The section and its menu button come back on their own.
+Your videos live on **Google Drive**, not on this website. That means no size
+limit, no length limit, and nothing gets muted for background music.
 
-
-Videos don't go in this website at all — they go on YouTube, and the site links
-to them. That means no size limit and no length limit.
-
-1. Upload your video to YouTube. Any length, any file size. If you don't want
-   it findable on YouTube itself, choose **Unlisted** when uploading — it still
-   works perfectly on your site.
-2. Copy the video's link.
-3. Open `edit-me/4-videos.ts` and click the pencil icon to edit it.
-4. Follow the instructions written at the top of that file — copy one block,
-   paste it, change the link, the title, and the description.
+1. Upload the video to your Google Drive.
+2. Right-click it → **Share** → under **General access**, choose
+   **"Anyone with the link"**, role **Viewer**.
+3. Click **Copy link**.
+4. Open `edit-me/4-videos.ts`, paste the link into a block, and change the
+   title. Copy the whole block again for a second video.
 5. Commit changes. Wait about a minute. Refresh.
 
-Each video takes a **title** and an optional short **description** under it.
-There's also an `intro` line at the top of that file — the sentence beside
-the "Work That Moves" heading. Change it to whatever you want that section
-to say.
+> **Step 2 is the one that matters.** If the file stays private, visitors see a
+> "request access" screen instead of your video. Anyone with the link can watch
+> it, but nobody can find it unless you give them the link — and nobody needs a
+> Google account to press play.
 
-The still image is pulled from YouTube automatically, so you never upload a
-thumbnail. Once a video is playing there's an **X** in its corner to stop it
-and put the still picture back.
+**No videos yet?** The whole Videos section, and its VIDEOS menu button, simply
+don't appear until you add your first working link. Nothing looks broken.
 
-**No videos yet?** That's fine — the whole Videos section just doesn't appear
-on the site until you add your first one.
-
----
+**Two things Google Drive decides, not us:** playback tops out at 1080p, and if
+a lot of people watch at the same moment Drive can throttle the video for a
+while. For a portfolio that is rarely an issue. YouTube links still work here
+too, if you ever want to move one.
 
 ## "I can't find where to change this word"
 

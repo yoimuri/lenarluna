@@ -35,7 +35,16 @@ export type AboutYou = {
 
 export type ToolItem = { name: string; use: string };
 
-export type VideoItem = { link: string; title: string; description: string };
+/**
+ * A video after its link has been understood. `source` is what the player
+ * embeds; `link` is kept only so a warning can quote what was pasted.
+ */
+export type VideoItem = {
+  link: string;
+  title: string;
+  description: string;
+  source: import("./video").VideoSource;
+};
 
 /**
  * A caption can be written two ways in edit-me/5-captions.ts:

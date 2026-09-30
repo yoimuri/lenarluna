@@ -20,7 +20,7 @@ import { software, gear } from "../../edit-me/3-software-and-gear";
 import { videos as rawVideos, intro as rawVideosIntro } from "../../edit-me/4-videos";
 import { words as rawWords } from "../../edit-me/7-words-on-the-site";
 import type { AboutYou, SiteWords, StatItem, ToolItem, VideoItem, YourDetails } from "./types";
-import { extractYouTubeId } from "./youtube";
+import { parseVideoLink } from "./video";
 
 function trim(s: unknown): string {
   return typeof s === "string" ? s.trim() : "";
@@ -176,19 +176,19 @@ function normalizeVideos(): VideoItem[] {
     const title = trim(v?.title);
     const description = trim((v as { description?: string })?.description);
     if (!link) return; // an empty placeholder block, nothing to warn about
-    const id = extractYouTubeId(link);
-    if (!id) {
+    const source = parseVideoLink(link);
+    if (!source) {
       const isFacebook = /facebook\.com|fb\.watch/i.test(link);
       videoWarnings.push(
         `edit-me/4-videos.ts, entry ${i + 1}: "${link}" doesn't work here -- ` +
           (isFacebook
-            ? `only YouTube links are supported right now, not Facebook. `
-            : `it doesn't look like a YouTube link. `) +
+            ? `Facebook links can't be embedded. Put the video on Google Drive instead. `
+            : `it isn't a Google Drive or YouTube link. `) +
           `This video won't show up on the site until the link is fixed.`
       );
       return;
     }
-    out.push({ link, title, description });
+    out.push({ link, title, description, source });
   });
   return out;
 }
